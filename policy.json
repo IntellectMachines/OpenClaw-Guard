@@ -1,0 +1,128 @@
+{
+  "version": "1.0.0",
+  "name": "default-policy",
+  "description": "Default Molt Guard security policy for AI agents",
+  "updatedAt": 1738454400000,
+  "strictMode": false,
+  
+  "budget": {
+    "dailyLimit": 1000,
+    "perRequestLimit": 100,
+    "hourlyLimit": 200,
+    "monthlyLimit": 25000,
+    "alertThreshold": 80
+  },
+  
+  "moderation": {
+    "detectPii": true,
+    "detectOffensive": true,
+    "analyzeSentiment": true,
+    "minSentimentScore": -0.5,
+    "blockedTerms": [
+      "password",
+      "secret",
+      "api_key",
+      "private_key"
+    ],
+    "allowedTerms": []
+  },
+  
+  "rules": [
+    {
+      "id": "rule-001",
+      "name": "Block negative Moltbook posts",
+      "description": "Prevent posting to Moltbook if sentiment is negative",
+      "priority": 1,
+      "enabled": true,
+      "targetTools": ["post_to_moltbook", "moltbook_post", "create_social_post"],
+      "conditions": [],
+      "action": {
+        "decision": "ALLOW",
+        "message": "Moltbook posts require content moderation",
+        "requireModeration": true
+      }
+    },
+    {
+      "id": "rule-002",
+      "name": "Admin-only financial operations",
+      "description": "Stripe charges require ADMIN role",
+      "priority": 2,
+      "enabled": true,
+      "targetTools": ["stripe_charge", "stripe_refund", "process_payment"],
+      "conditions": [],
+      "action": {
+        "decision": "ALLOW",
+        "message": "Financial operations allowed for authorized users",
+        "requireJitToken": true,
+        "requiredRoles": ["ADMIN"]
+      }
+    },
+    {
+      "id": "rule-003",
+      "name": "AWS deployment controls",
+      "description": "AWS deployments require approval and JIT credentials",
+      "priority": 3,
+      "enabled": true,
+      "targetTools": ["aws_deploy", "lambda_deploy", "s3_upload"],
+      "conditions": [],
+      "action": {
+        "decision": "ALLOW",
+        "message": "AWS operations require JIT credentials",
+        "requireJitToken": true,
+        "requiredRoles": ["ADMIN", "SERVICE"],
+        "maxBudget": 500
+      }
+    },
+    {
+      "id": "rule-004",
+      "name": "Block dangerous operations",
+      "description": "Always deny destructive operations",
+      "priority": 0,
+      "enabled": true,
+      "targetTools": ["delete_all", "format_disk", "drop_database", "rm_rf"],
+      "conditions": [],
+      "action": {
+        "decision": "DENY",
+        "message": "Destructive operations are not permitted"
+      }
+    }
+  ],
+  
+  "services": [
+    {
+      "type": "AWS",
+      "enabled": true,
+      "tokenTtl": 900,
+      "allowedScopes": ["s3:*", "lambda:*", "dynamodb:*"],
+      "roleArn": "${MOLT_GUARD_AWS_ROLE_ARN}"
+    },
+    {
+      "type": "STRIPE",
+      "enabled": true,
+      "tokenTtl": 3600,
+      "allowedScopes": ["charges:write", "customers:read", "refunds:write"]
+    },
+    {
+      "type": "MOLTBOOK",
+      "enabled": true,
+      "tokenTtl": 300,
+      "allowedScopes": ["post:create", "post:read", "comment:create"]
+    }
+  ],
+  
+  "allowlistedTools": [
+    "read_file",
+    "search_web",
+    "get_time",
+    "get_weather",
+    "calculate"
+  ],
+  
+  "denylistedTools": [
+    "delete_all",
+    "format_disk",
+    "drop_database",
+    "exec_shell",
+    "rm_rf"
+  ]
+}

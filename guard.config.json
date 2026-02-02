@@ -1,0 +1,64 @@
+{
+  "name": "molt-guard-config",
+  "version": "1.0.0",
+  "description": "Configuration for Molt Guard SDK",
+  
+  "server": {
+    "port": 3001,
+    "host": "localhost",
+    "enableCors": true,
+    "timeout": 5000
+  },
+  
+  "sdk": {
+    "serverUrl": "http://localhost:3001",
+    "failOpen": false,
+    "debug": false,
+    "retry": {
+      "maxAttempts": 3,
+      "backoffMs": 1000
+    }
+  },
+  
+  "mode": "strict",
+  "policyFile": "./policy.json",
+  
+  "allowed_tools": [
+    "read_file",
+    "search_web",
+    "get_time",
+    "get_weather",
+    "calculate"
+  ],
+  
+  "protected_tools": {
+    "stripe_charge": {
+      "requires_approval": false,
+      "requires_jit_token": true,
+      "required_roles": ["ADMIN"],
+      "max_budget": 10000
+    },
+    "aws_deploy": {
+      "requires_approval": true,
+      "requires_jit_token": true,
+      "max_duration": 900,
+      "required_roles": ["ADMIN", "SERVICE"]
+    },
+    "post_to_moltbook": {
+      "requires_moderation": true,
+      "requires_jit_token": true,
+      "min_sentiment": -0.5
+    },
+    "delete_file": {
+      "requires_approval": true,
+      "required_roles": ["ADMIN"]
+    }
+  },
+  
+  "blocked_tools": [
+    "delete_all",
+    "format_disk",
+    "drop_database",
+    "exec_shell"
+  ]
+}

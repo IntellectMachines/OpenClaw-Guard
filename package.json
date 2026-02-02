@@ -1,0 +1,75 @@
+{
+  "name": "molt-guard",
+  "version": "1.0.0",
+  "description": "Security middleware for AI Agents - Zero Trust architecture with JIT token vending",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.mjs",
+      "require": "./dist/types.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "dev": "ts-node src/index.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "security",
+    "middleware",
+    "zero-trust",
+    "jit",
+    "token",
+    "guard",
+    "proxy",
+    "openai",
+    "llm"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^25.2.0",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-sts": "^3.0.0",
+    "@types/jest": "^29.5.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "prettier": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-sts": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@aws-sdk/client-sts": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
