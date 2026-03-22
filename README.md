@@ -1,15 +1,15 @@
-# Molt Guard
+# Open Claw Guard
 
 > Security Middleware for AI Agents - Zero Trust Architecture with JIT Token Vending
 
-Molt Guard is a TypeScript library that acts as a security layer between AI agents and their tools. It implements a Zero Trust architecture where the agent never directly holds sensitive credentials - instead, it requests permission and receives ephemeral tokens just-in-time.
+Open Claw Guard is a TypeScript library that acts as a security layer between AI agents and their tools. It implements a Zero Trust architecture where the agent never directly holds sensitive credentials - instead, it requests permission and receives ephemeral tokens just-in-time.
 
 ## Architecture
 
 ```
 ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
 │                 │      │                 │      │                 │
-│    AI Agent     │─────▶│   Molt Guard    │─────▶│  External APIs  │
+│    AI Agent     │─────▶│   Open Claw Guard    │─────▶│  External APIs  │
 │   (OpenClaw)    │      │   (Interceptor) │      │ (Stripe, AWS)   │
 │                 │◀─────│                 │◀─────│                 │
 └─────────────────┘      └─────────────────┘      └─────────────────┘
@@ -42,13 +42,13 @@ Molt Guard is a TypeScript library that acts as a security layer between AI agen
 ## Installation
 
 ```bash
-npm install molt-guard
+npm install Open Claw-guard
 ```
 
 ## Quick Start
 
 ```typescript
-import { guard } from 'molt-guard';
+import { guard } from 'Open Claw-guard';
 
 // 1. Initialize the guard
 await guard.init();
@@ -100,7 +100,7 @@ Just-In-Time tokens are ephemeral credentials:
 ```typescript
 interface JitToken {
   token: string;
-  type: 'AWS' | 'STRIPE' | 'MOLTBOOK';
+  type: 'AWS' | 'STRIPE' | 'Open ClawBOOK';
   expiresAt: number;
   scopes?: string[];
   // AWS-specific fields
@@ -115,7 +115,7 @@ interface JitToken {
 ### Basic Protection
 
 ```typescript
-import { guard } from 'molt-guard';
+import { guard } from 'Open Claw-guard';
 
 await guard.init();
 
@@ -140,7 +140,7 @@ await securedStripe.charge({ amount: 1000 });
 ### Using Decorators
 
 ```typescript
-import { Protected } from 'molt-guard';
+import { Protected } from 'Open Claw-guard';
 
 class PaymentService {
   @Protected('financial_policy')
@@ -223,7 +223,7 @@ Policies are defined in JSON:
     {
       "id": "rule-001",
       "name": "Block negative posts",
-      "targetTools": ["post_to_moltbook"],
+      "targetTools": ["post_to_Open Clawbook"],
       "conditions": [],
       "action": {
         "decision": "ALLOW",
@@ -240,26 +240,26 @@ Policies are defined in JSON:
 
 ```bash
 # Guard configuration
-MOLT_GUARD_JWT_SECRET=your-secure-secret
-MOLT_GUARD_API_KEY=your-api-key
+Open Claw_GUARD_JWT_SECRET=your-secure-secret
+Open Claw_GUARD_API_KEY=your-api-key
 
 # AWS (for JIT token vending)
 AWS_ACCESS_KEY_ID=...
 AWS_SECRET_ACCESS_KEY=...
-MOLT_GUARD_AWS_ROLE_ARN=arn:aws:iam::123456789012:role/AgentRole
+Open Claw_GUARD_AWS_ROLE_ARN=arn:aws:iam::123456789012:role/AgentRole
 
 # Stripe
 STRIPE_SECRET_KEY=sk_live_...
 
-# Moltbook
-MOLTBOOK_API_KEY=...
-MOLTBOOK_APP_ID=...
+# Open Clawbook
+Open ClawBOOK_API_KEY=...
+Open ClawBOOK_APP_ID=...
 ```
 
 ## API Reference
 
 ### `guard.init(options?)`
-Initialize the Molt Guard system.
+Initialize the Open Claw Guard system.
 
 ### `guard.protect(tool, policyName?)`
 Wrap a single tool with security checks.
